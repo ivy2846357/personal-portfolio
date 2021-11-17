@@ -9,6 +9,7 @@ const glob = require('glob');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require('webpack');
 
+
 //輸出內容
 module.exports = {
     entry: './src/js/all.js',
@@ -24,41 +25,95 @@ module.exports = {
         },
         compress: true,
         port: 9000,
-        open: true
+        open: true,
+        hot: true
     },
+
+    // devtool: 'eval-cheap-source-map',
+    // devtool: 'source-map',
 
     module: {
         rules: [{
-            test: /\.s[ac]ss$/i,
-            use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader", ],
-        }, {
-            test: /\.(png|jpe?g|gif|svg|webp)$/i,
-            use: [{
-                loader: 'url-loader',
-                options: {
-                    limit: 8192,
-                    name: 'img/[name].[ext]',
-                    publicPath: '../',
+            oneOf: [{
+                    test: /\.s[ac]ss$/i,
+                    use: [MiniCssExtractPlugin.loader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: true,
+                                postcssOptions: {
+                                    plugins: [
+                                        ["autoprefixer", ],
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
+                    ],
                 },
-            }, ],
-        }, {
-            test: /\.html$/i,
-            loader: "html-loader",
-        }, {
-            loader: 'image-webpack-loader',
-            options: {
-                disable: process.env.NODE_ENV === 'production' ? false : true,
-            },
-        }, ],
+                {
+                    test: /\.(png|jpe?g|gif|svg|webp)$/i,
+                    use: [{
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8192,
+                            name: 'img/[name].[ext]',
+                            publicPath: '/'
+                        },
+                    }, ],
+                },
+                {
+                    test: /\.html$/i,
+                    loader: "html-loader",
+                },
+                {
+                    test: /\.m?js$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            "presets": [
+                                ["@babel/preset-env", {
+                                    "useBuiltIns": "usage",
+                                    "corejs": {
+                                        "version": 3
+                                    },
+                                    "targets": {
+                                        "chrome": "60",
+                                        "firefox": "60",
+                                        "ie": "9",
+                                        "safari": "10",
+                                        "edge": "17"
+                                    }
+                                }]
+                            ],
+                            cacheDirectory: true,
+                        },
+                    },
+                },
+            ]
+        }],
     },
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css',
+            filename: 'style/bundle.css',
         }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/index.html',
+            title: 'Caching',
         }),
         new PurgecssPlugin({
             paths: glob.sync(`${path.resolve(__dirname, 'src')}/**/*`, {
@@ -78,5 +133,5 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery'
         }),
-    ],
-};
+    ]
+}
