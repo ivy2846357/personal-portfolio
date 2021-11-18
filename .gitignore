@@ -1,5 +1,5 @@
 node_modules
 .vscode
 src
-browserslistrc
-bundle.js.LICENSE.txt
+.browserslistrc
+webpack.config.js
