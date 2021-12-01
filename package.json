@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cross-env NODE_ENV=development webpack --mode development",
-    "dev": "cross-env NODE_ENV=development webpack serve --mode development",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server",
     "deploy": "cross-env NODE_ENV=production webpack --mode production"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ivy2846357/personal-portfolio#readme",
   "dependencies": {
+    "bootstrap-icons": "^1.7.1",
     "browserslist": "^4.18.1",
     "core-js": "^3.19.1",
     "jquery": "^3.6.0",

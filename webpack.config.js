@@ -19,6 +19,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');; //設定copy-webpack-
 
 //輸出內容
 module.exports = {
+    target: "web",
+
+    devtool: 'eval-cheap-source-map',
+    // devtool: 'source-map',
 
     entry: './src/js/all.js',
 
@@ -32,10 +36,10 @@ module.exports = {
     //新增HTTP伺服器
     devServer: {
         static: {
-            directory: path.join(__dirname, 'dist'), //使用dist資料夾的內容生成HTML檔案
+            directory: path.resolve(__dirname, 'dist'), //使用dist資料夾的內容生成HTML檔案
         },
         compress: true, //是否要壓縮
-        port: 9000, //伺服器port設定
+        port: 7000, //伺服器port設定
         open: true, //開啟devServer時，自動開啟HTML網站
         hot: true
     },
@@ -69,9 +73,6 @@ module.exports = {
             },
         },
     },
-
-    devtool: 'eval-cheap-source-map',
-    // devtool: 'source-map',
 
     module: {
         rules: [
@@ -206,8 +207,7 @@ module.exports = {
         //新增首頁HTML檔案，並將JS/CSS引入
         new HtmlWebpackPlugin({
             template: 'src/index.html', //引入檔案名稱
-            filename: 'index-[contenthash:5].html', //輸出檔案名稱
-            title: 'personal-portfolio',
+            filename: 'index.html', //輸出檔案名稱
         }),
 
         //清除多餘的CSS

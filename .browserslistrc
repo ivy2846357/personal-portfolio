@@ -1,8 +1,0 @@
-defaults
-last 2 version
-> 1%
-Firefox >= 45
-iOS >= 8
-Safari >= 8
-ie >= 10
-not ie <= 8
