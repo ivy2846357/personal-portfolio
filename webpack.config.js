@@ -15,7 +15,8 @@ const PurgecssPlugin = require('purgecss-webpack-plugin'); //設定purgecss-webp
 const glob = require('glob'); //設定多頁打包
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); //設定optimize-css-assets-webpack-plugin(CSS檔案壓縮)
 const webpack = require('webpack'); //設定ProvidePlugin(引入第三方資源)
-const CopyWebpackPlugin = require('copy-webpack-plugin');; //設定copy-webpack-plugin(複製src檔案到dist的資料夾)
+const CopyWebpackPlugin = require('copy-webpack-plugin'); //設定copy-webpack-plugin(複製src檔案到dist的資料夾)
+
 
 //輸出內容
 module.exports = {
@@ -30,7 +31,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'), //檔案輸出位置
         filename: 'js/bundle-[contenthash:5].js', //JS輸出檔名
-        //assetModuleFilename: 'img/[name][contenthash:5][ext][query]', //圖片輸出路徑
+        assetModuleFilename: 'img/[name][ext]', //圖片輸出路徑
     },
 
     //新增HTTP伺服器
@@ -111,17 +112,11 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif)$/i,
                 type: 'asset/resource',
-                generator: {
-                    filename: 'img/[name]-[contenthash:5][ext][query]',
-                },
             },
 
             {
-                test: /\.svg/,
-                type: 'asset/inline',
-                generator: {
-                    filename: 'img/[name]-[contenthash:5][ext][query]',
-                },
+                test: /\.svg$/,
+                loader: 'svg-inline-loader',
             },
 
             //image-webpack-loader
