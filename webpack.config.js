@@ -6,17 +6,16 @@ require => 使用nodeJS的功能，並幫我引用到檔案內
 */
 
 const path = require('path'); //設定路徑
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //設定html-webpack-plugin(複製HTML文件，並引入JS/CSS檔案)
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //設定mini-css-extract-plugin(CSS檔案獨立設定)
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //設定 html-webpack-plugin (複製 HTML 文件，並引入 JS / CSS 檔案)
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //設定 mini-css-extract-plugin ( CSS 檔案獨立設定)
 const {
     CleanWebpackPlugin
-} = require('clean-webpack-plugin'); //設定clean-webpack-plugin(清除舊有dist內容) 
-const PurgecssPlugin = require('purgecss-webpack-plugin'); //設定purgecss-webpack-plugin(清除沒用到的CSS樣式)
+} = require('clean-webpack-plugin'); //設定 clean-webpack-plugin (清除舊有 dist 內容) 
+const PurgecssPlugin = require('purgecss-webpack-plugin'); //設定 purgecss-webpack-plugin (清除沒用到的 CSS 樣式)
 const glob = require('glob'); //設定多頁打包
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); //設定optimize-css-assets-webpack-plugin(CSS檔案壓縮)
-const webpack = require('webpack'); //設定ProvidePlugin(引入第三方資源)
-const CopyWebpackPlugin = require('copy-webpack-plugin'); //設定copy-webpack-plugin(複製src檔案到dist的資料夾)
-
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); //設定 optimize-css-assets-webpack-plugin ( CSS 檔案壓縮)
+const webpack = require('webpack'); //設定 ProvidePlugin (引入第三方資源)
+const CopyWebpackPlugin = require('copy-webpack-plugin'); //設定 copy-webpack-plugin (複製 src 檔案到 dist 的資料夾)
 
 //輸出內容
 module.exports = {
@@ -30,23 +29,23 @@ module.exports = {
     //輸出路徑位置
     output: {
         path: path.resolve(__dirname, 'dist'), //檔案輸出位置
-        filename: 'js/bundle-[contenthash:5].js', //JS輸出檔名
+        filename: 'js/bundle-[contenthash:5].js', //JS 輸出檔名
         assetModuleFilename: 'img/[name][ext]', //圖片輸出路徑
     },
 
-    //新增HTTP伺服器
+    //新增 HTTP 伺服器
     devServer: {
         static: {
-            directory: path.resolve(__dirname, 'dist'), //使用dist資料夾的內容生成HTML檔案
+            directory: path.resolve(__dirname, 'dist'), //使用 dist 資料夾的內容生成 HTML 檔案
         },
         compress: true, //是否要壓縮
-        port: 7000, //伺服器port設定
-        open: true, //開啟devServer時，自動開啟HTML網站
+        port: 7000, //伺服器 port 設定
+        open: true, //開啟 devServer 時，自動開啟 HTML 網站
         hot: true
     },
 
     optimization: {
-        usedExports: true, // usedExports:true 開啟優化(Tree Shaking但保留程式碼)
+        usedExports: true, // usedExports:true 開啟優化( Tree Shaking 但保留程式碼)
         minimize: true, // minimize:true 開啟壓縮 (刪除未使用程式碼)
         // sideEffects 將檔案標誌為副作用
 
@@ -78,10 +77,10 @@ module.exports = {
     module: {
         rules: [
 
-            //CSS/SASS-loader
+            // CSS / SASS-loader
             {
                 test: /\.s[ac]ss$/i,
-                use: [MiniCssExtractPlugin.loader, //產生CSS獨立文件
+                use: [MiniCssExtractPlugin.loader, //產生 CSS 獨立文件
                     {
                         loader: 'css-loader',
                         options: {
@@ -89,7 +88,7 @@ module.exports = {
                         },
                     },
                     {
-                        loader: "postcss-loader", //編譯並處理CSS兼容性設定
+                        loader: "postcss-loader", //編譯並處理 CSS 兼容性設定
                         options: {
                             sourceMap: true,
                             postcssOptions: {
@@ -151,7 +150,7 @@ module.exports = {
             //babel
             {
                 test: /\.m?js$/,
-                exclude: /node_modules/, //exclude的內容不要幫我做JS兼容性
+                exclude: /node_modules/, //exclude 的內容不要幫我做JS兼容性
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -161,7 +160,7 @@ module.exports = {
                                 "corejs": {
                                     "version": 3
                                 },
-                                //JS兼容性版本設定
+                                //JS 兼容性版本設定
                                 "targets": {
                                     "chrome": "60",
                                     "firefox": "60",
@@ -179,40 +178,39 @@ module.exports = {
             //字型處理
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                include: [path.resolve(__dirname, "src/assets/fontStyle")], // 只命中指定 目錄下的檔案，加快Webpack 搜尋速度
+                include: [path.resolve(__dirname, "src/assets/fontStyle")], // 只命中指定 目錄下的檔案，加快 Webpack 搜尋速度
                 exclude: /(node_modules)/, // 排除 node_modules 目錄下的檔案
                 loader: 'file-loader',
-                // 新增options配置引數：關於file-loader的配置項
+                // 新增 options 配置引數：關於 file-loader 的配置項
                 options: {
                     limit: 10000,
                     outputPath: 'css/fonts/', // 定義打包完成後最終匯出的檔案路徑
                     name: '[name].[hash:7].[ext]' // 檔案的最終名稱
                 }
             },
-
         ],
     },
 
     plugins: [
-        //設定CSS獨立文件位置
+        //設定 CSS 獨立文件位置
         new MiniCssExtractPlugin({
             filename: 'style/bundle-[contenthash:5].css',
         }),
 
-        //新增首頁HTML檔案，並將JS/CSS引入
+        //新增首頁 HTML 檔案，並將 JS / CSS 引入
         new HtmlWebpackPlugin({
             template: 'src/index.html', //引入檔案名稱
             filename: 'index.html', //輸出檔案名稱
         }),
 
-        //清除多餘的CSS
+        //清除多餘的 CSS
         new PurgecssPlugin({
             paths: glob.sync(`${path.resolve(__dirname, 'src')}/**/*`, {
                 nodir: true,
             }),
         }),
 
-        //壓縮CSS檔案
+        //壓縮 CSS 檔案
         new OptimizeCssAssetsPlugin({
             cssProcessorPluginOptions: {
                 preset: ['default', {
@@ -229,11 +227,13 @@ module.exports = {
             jQuery: 'jquery',
         }),
 
-        //清除dist舊有內容
+        //清除 dist 舊有內容
         new CleanWebpackPlugin(),
 
-        //複製src其他資料到dist內
+        //複製 src 其他資料到 dist 內
         //例如： zip、 mp3、 font
+
+        // JsonMinimizerWebpackPlugin 可壓縮 JSON 檔案
         new CopyWebpackPlugin({
             patterns: [{
                 from: "./src/assets", //起始資料夾
