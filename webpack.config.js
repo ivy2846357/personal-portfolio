@@ -33,6 +33,10 @@ module.exports = {
         assetModuleFilename: 'img/[name][ext]', //圖片輸出路徑
     },
 
+    resolve: {
+        modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    },
+
     //新增 HTTP 伺服器
     devServer: {
         static: {
@@ -105,6 +109,10 @@ module.exports = {
                         },
                     },
                 ],
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             },
 
             //圖片處理
@@ -232,8 +240,6 @@ module.exports = {
 
         //複製 src 其他資料到 dist 內
         //例如： zip、 mp3、 font
-
-        // JsonMinimizerWebpackPlugin 可壓縮 JSON 檔案
         new CopyWebpackPlugin({
             patterns: [{
                 from: "./src/assets", //起始資料夾
