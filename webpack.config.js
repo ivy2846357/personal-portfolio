@@ -243,7 +243,7 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [{
                 from: "./src/assets", //起始資料夾
-                to: "assets/[path][name]-[contenthash:5][ext]" //搬運資料夾
+                to: "assets/[path][name][ext]" //搬運資料夾
             }, ],
         }),
     ]
